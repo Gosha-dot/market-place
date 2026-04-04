@@ -1,0 +1,81 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+* {
+  @apply transition-colors duration-200;
+}
+
+body {
+  @apply bg-mist-50 text-ink-900 font-body;
+}
+
+.dark body {
+  @apply bg-ink-900 text-mist-100;
+}
+
+.container-page {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+
+.card {
+  @apply rounded-2xl border border-mist-200 bg-white shadow-soft;
+}
+
+.dark .card {
+  @apply border-ink-700 bg-ink-800 shadow-none;
+}
+
+.section-title {
+  @apply font-display text-2xl sm:text-3xl;
+}
+
+.badge {
+  @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide;
+}
+
+.badge-accent {
+  @apply bg-accent-500 text-white;
+}
+
+.badge-muted {
+  @apply bg-mist-100 text-ink-700;
+}
+
+.dark .badge-muted {
+  @apply bg-ink-700 text-mist-100;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold shadow-soft;
+}
+
+.btn-primary {
+  @apply bg-accent-500 text-white hover:bg-accent-600;
+}
+
+.btn-ghost {
+  @apply bg-white text-ink-900 border border-mist-200 hover:border-mist-300;
+}
+
+.dark .btn-ghost {
+  @apply bg-ink-800 text-mist-100 border-ink-700 hover:border-ink-600;
+}
+
+.link {
+  @apply text-ink-700 hover:text-ink-900;
+}
+
+.dark .link {
+  @apply text-mist-200 hover:text-white;
+}
