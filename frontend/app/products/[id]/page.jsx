@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { fetchProduct } from '@/lib/api';
@@ -6,6 +6,9 @@ import { mockProducts } from '@/lib/mockData';
 import Rating from '@/components/ui/Rating';
 import { useCurrency } from '@/components/CurrencyProvider';
 import { formatCurrency } from '@/lib/currency';
+import { useCart } from '@/hooks/useCart';
+import { useWishlist } from '@/hooks/useWishlist';
+import { useCompare } from '@/hooks/useCompare';
 
 const mockReviews = [
   { name: 'Ava', rating: 5, text: 'Exceeded expectations. Shipping was fast.' },
@@ -16,6 +19,9 @@ const mockReviews = [
 export default function ProductDetail({ params }) {
   const [product, setProduct] = useState(null);
   const { currency } = useCurrency();
+  const cart = useCart();
+  const wishlist = useWishlist();
+  const compare = useCompare();
 
   useEffect(() => {
     async function load() {
@@ -32,6 +38,9 @@ export default function ProductDetail({ params }) {
   if (!product) return <div>Loading...</div>;
 
   const discounted = product.price * (1 - product.discountPercent / 100);
+  const inWishlist = wishlist.has(product._id);
+  const inCompare = compare.has(product._id);
+  const outOfStock = product.stockLeft <= 0;
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
@@ -57,13 +66,29 @@ export default function ProductDetail({ params }) {
         <p className="text-sm text-ink-600 dark:text-mist-200">
           {product.description || 'Premium curated product from our best-rated sellers.'}
         </p>
+
         <div className="card p-4">
           <p className="text-xs text-ink-500 dark:text-mist-300">Seller</p>
           <p className="font-semibold">{product.seller?.name}</p>
           <p className="text-xs text-ink-500 dark:text-mist-300">Rating {product.seller?.rating}</p>
         </div>
-        <button className="btn btn-primary w-full">Add to cart</button>
-        <button className="btn btn-ghost w-full">Add to wishlist</button>
+
+        <button
+          className="btn btn-primary w-full"
+          disabled={outOfStock}
+          onClick={() => cart.add(product._id, 1)}
+        >
+          {outOfStock ? 'Out of stock' : 'Add to cart'}
+        </button>
+        <div className="grid grid-cols-2 gap-2">
+          <button className="btn btn-ghost w-full" onClick={() => wishlist.toggle(product._id)}>
+            {inWishlist ? 'Wishlisted' : 'Add to wishlist'}
+          </button>
+          <button className="btn btn-ghost w-full" onClick={() => compare.toggle(product._id)}>
+            {inCompare ? 'In compare' : 'Compare'}
+          </button>
+        </div>
+
         <div className="pt-4">
           <h2 className="section-title">Reviews</h2>
           <div className="mt-4 space-y-3">
@@ -82,3 +107,4 @@ export default function ProductDetail({ params }) {
     </div>
   );
 }
+

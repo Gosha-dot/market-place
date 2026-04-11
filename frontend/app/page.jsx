@@ -1,39 +1,23 @@
-﻿'use client';
+'use client';
 
-import { useEffect, useState } from 'react';
 import Hero from '@/components/Hero';
 import FlashSale from '@/components/FlashSale';
 import Categories from '@/components/Categories';
 import ProductGrid from '@/components/ProductGrid';
-import Filters from '@/components/Filters';
+import SkeletonProductGrid from '@/components/SkeletonProductGrid';
 import { categories as mockCategories, mockProducts } from '@/lib/mockData';
-import { loadCart, saveCart } from '@/lib/cart';
 import { useInfiniteProducts } from '@/lib/useInfiniteProducts';
 import LoadMoreTrigger from '@/components/ui/LoadMoreTrigger';
 
+const HOME_PRODUCTS_PAGE_SIZE = 24;
+const HOME_DEFAULT_FILTERS = {};
+
 export default function HomePage() {
-  const [filters, setFilters] = useState({ category: '', maxPrice: '', minRating: '' });
-  const [cart, setCart] = useState([]);
-
   const { items, hasMore, loading, error, loadMore } = useInfiniteProducts({
-    filters,
-    pageSize: 6
+    filters: HOME_DEFAULT_FILTERS,
+    pageSize: HOME_PRODUCTS_PAGE_SIZE
   });
-
-  const handleAdd = (product) => {
-    const existing = cart.find((item) => item._id === product._id);
-    const updated = existing
-      ? cart.map((item) =>
-          item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
-        )
-      : [...cart, { ...product, quantity: 1 }];
-    setCart(updated);
-    saveCart(updated);
-  };
-
-  useEffect(() => {
-    setCart(loadCart());
-  }, []);
+  const products = items.length ? items : mockProducts.slice(0, HOME_PRODUCTS_PAGE_SIZE);
 
   return (
     <div className="space-y-12">
@@ -46,11 +30,12 @@ export default function HomePage() {
             {error ? 'Mock data in use' : 'Updated hourly'}
           </span>
         </div>
-        <div className="mt-4">
-          <Filters filters={filters} onChange={setFilters} categories={mockCategories} />
-        </div>
         <div className="mt-6">
-          <ProductGrid products={items} onAdd={handleAdd} />
+          {items.length === 0 && loading ? (
+            <SkeletonProductGrid count={HOME_PRODUCTS_PAGE_SIZE} />
+          ) : (
+            <ProductGrid products={products} />
+          )}
           <div className="mt-6 flex flex-col items-center gap-3 text-sm text-ink-500 dark:text-mist-300">
             {loading && <span>Loading more deals...</span>}
             {!hasMore && <span>No more items to load.</span>}
@@ -59,7 +44,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <FlashSale products={(items.length ? items : mockProducts).slice(0, 3)} onAdd={handleAdd} />
+      <FlashSale products={(items.length ? items : mockProducts).slice(0, 3)} />
       <Categories items={mockCategories} />
     </div>
   );

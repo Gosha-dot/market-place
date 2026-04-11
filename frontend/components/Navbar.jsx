@@ -12,12 +12,14 @@ export default function Navbar() {
           </Link>
           <div className="hidden items-center gap-4 text-sm text-ink-600 dark:text-mist-200 md:flex">
             <Link href="/" className="link">Home</Link>
+            <Link href="/products" className="link">Products</Link>
             <Link href="/#flash" className="link">Flash Sale</Link>
             <Link href="/#categories" className="link">Categories</Link>
             <Link href="/admin" className="link">Admin</Link>
           </div>
         </div>
         <div className="flex items-center gap-3">
+          <Link href="/compare" className="link text-sm">Compare</Link>
           <Link href="/wishlist" className="link text-sm">Wishlist</Link>
           <Link href="/cart" className="link text-sm">Cart</Link>
           <CurrencyToggle />
