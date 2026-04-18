@@ -9,6 +9,7 @@ import { formatCurrency } from '@/lib/currency';
 import { useCart } from '@/hooks/useCart';
 import { useWishlist } from '@/hooks/useWishlist';
 import { useCompare } from '@/hooks/useCompare';
+import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 
 const mockReviews = [
   { name: 'Ava', rating: 5, text: 'Exceeded expectations. Shipping was fast.' },
@@ -22,6 +23,7 @@ export default function ProductDetail({ params }) {
   const cart = useCart();
   const wishlist = useWishlist();
   const compare = useCompare();
+  const recentlyViewed = useRecentlyViewed();
 
   useEffect(() => {
     async function load() {
@@ -31,9 +33,10 @@ export default function ProductDetail({ params }) {
       } catch {
         setProduct(mockProducts.find((item) => item._id === params.id) || mockProducts[0]);
       }
+      recentlyViewed.add(params.id);
     }
     load();
-  }, [params.id]);
+  }, [params.id, recentlyViewed.add]);
 
   if (!product) return <div>Loading...</div>;
 
@@ -107,4 +110,3 @@ export default function ProductDetail({ params }) {
     </div>
   );
 }
-

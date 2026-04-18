@@ -23,13 +23,24 @@ export default function FilterPanel({
   onReset,
   disabled
 }: Props) {
+  const [queryInput, setQueryInput] = useState(filters.q ?? '');
   const [minPriceInput, setMinPriceInput] = useState(filters.minPrice?.toString() ?? '');
   const [maxPriceInput, setMaxPriceInput] = useState(filters.maxPrice?.toString() ?? '');
   const [discountInput, setDiscountInput] = useState(filters.discountPercent?.toString() ?? '');
 
+  useEffect(() => setQueryInput(filters.q ?? ''), [filters.q]);
   useEffect(() => setMinPriceInput(filters.minPrice?.toString() ?? ''), [filters.minPrice]);
   useEffect(() => setMaxPriceInput(filters.maxPrice?.toString() ?? ''), [filters.maxPrice]);
   useEffect(() => setDiscountInput(filters.discountPercent?.toString() ?? ''), [filters.discountPercent]);
+
+  const commitQuery = useMemo(
+    () =>
+      debounce((q: string) => {
+        const nextQ = q.trim();
+        onChangeFilters({ ...filters, q: nextQ.length ? nextQ : undefined });
+      }, 200),
+    [filters, onChangeFilters]
+  );
 
   const commitNumber = useMemo(
     () =>
@@ -49,7 +60,34 @@ export default function FilterPanel({
   };
 
   return (
-    <div className="card grid gap-4 p-4 lg:grid-cols-[1fr_1fr_1fr_1.2fr]">
+    <div className="card grid gap-4 p-4 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr]">
+      <div className="lg:col-span-4">
+        <label className="text-xs text-ink-500 dark:text-mist-300">Search</label>
+        <div className="mt-1 flex gap-2">
+          <input
+            value={queryInput}
+            disabled={disabled}
+            onChange={(e) => {
+              const v = e.target.value;
+              setQueryInput(v);
+              commitQuery(v);
+            }}
+            placeholder="Search products, brands, categories..."
+            className="w-full rounded-lg border border-mist-200 bg-white px-3 py-2 text-sm dark:border-ink-700 dark:bg-ink-800"
+          />
+          <button
+            type="button"
+            className="btn btn-ghost whitespace-nowrap text-sm"
+            disabled={disabled || !queryInput}
+            onClick={() => {
+              setQueryInput('');
+              onChangeFilters({ ...filters, q: undefined });
+            }}
+          >
+            Clear
+          </button>
+        </div>
+      </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
         <div className="flex flex-col">
           <label className="text-xs text-ink-500 dark:text-mist-300">Min price</label>
@@ -193,4 +231,3 @@ export default function FilterPanel({
     </div>
   );
 }
-

@@ -4,6 +4,7 @@ export interface ParsedProductsQuery {
   ids?: string[];
   page: number;
   limit: number;
+  q?: string;
   category?: string;
   minPrice?: number;
   maxPrice?: number;
@@ -43,6 +44,7 @@ export function parseProductsQuery(searchParams: URLSearchParams): ParsedProduct
 
   const ids = parseCommaList(searchParams.get('ids'));
 
+  const q = (searchParams.get('q') || '').trim() || undefined;
   const category = searchParams.get('category') || undefined;
   const minPrice = parseNumber(searchParams.get('minPrice'));
   const maxPrice = parseNumber(searchParams.get('maxPrice'));
@@ -71,6 +73,7 @@ export function parseProductsQuery(searchParams: URLSearchParams): ParsedProduct
     ids,
     page,
     limit,
+    q,
     category,
     minPrice,
     maxPrice,
@@ -91,6 +94,14 @@ export function buildMongoQuery(parsed: ParsedProductsQuery): {
 
   if (parsed.ids?.length) mongoQuery._id = { $in: parsed.ids };
   if (parsed.category) mongoQuery.category = parsed.category;
+  if (parsed.q) {
+    mongoQuery.$or = [
+      { title: { $regex: parsed.q, $options: 'i' } },
+      { brand: { $regex: parsed.q, $options: 'i' } },
+      { category: { $regex: parsed.q, $options: 'i' } },
+      { description: { $regex: parsed.q, $options: 'i' } }
+    ];
+  }
 
   if (parsed.minPrice !== undefined || parsed.maxPrice !== undefined) {
     mongoQuery.price = {
@@ -129,8 +140,17 @@ function compareBySort(a: Product, b: Product, sort: ProductSort): number {
 }
 
 export function filterAndSortProducts(products: Product[], parsed: ParsedProductsQuery): Product[] {
+  const q = parsed.q?.trim().toLowerCase();
+  const qWords = q ? q.split(/\s+/).filter(Boolean) : [];
+
   const filtered = products.filter((p) => {
     if (parsed.ids?.length && !parsed.ids.includes(p._id)) return false;
+    if (qWords.length) {
+      const haystack = `${p.title} ${p.brand} ${p.category} ${p.description ?? ''}`.toLowerCase();
+      for (const word of qWords) {
+        if (!haystack.includes(word)) return false;
+      }
+    }
     if (parsed.category && p.category !== parsed.category) return false;
     if (parsed.minPrice !== undefined && p.price < parsed.minPrice) return false;
     if (parsed.maxPrice !== undefined && p.price > parsed.maxPrice) return false;

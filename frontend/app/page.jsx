@@ -8,20 +8,40 @@ import SkeletonProductGrid from '@/components/SkeletonProductGrid';
 import { categories as mockCategories, mockProducts } from '@/lib/mockData';
 import { useInfiniteProducts } from '@/lib/useInfiniteProducts';
 import LoadMoreTrigger from '@/components/ui/LoadMoreTrigger';
+import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
+import { useProductsByIds } from '@/hooks/useProductsByIds';
 
 const HOME_PRODUCTS_PAGE_SIZE = 24;
 const HOME_DEFAULT_FILTERS = {};
 
 export default function HomePage() {
+  const recentlyViewed = useRecentlyViewed();
+  const recent = useProductsByIds(recentlyViewed.ids);
+
   const { items, hasMore, loading, error, loadMore } = useInfiniteProducts({
     filters: HOME_DEFAULT_FILTERS,
     pageSize: HOME_PRODUCTS_PAGE_SIZE
   });
   const products = items.length ? items : mockProducts.slice(0, HOME_PRODUCTS_PAGE_SIZE);
+  const recentProducts = recentlyViewed.ids.map((id) => recent.byId.get(id)).filter(Boolean);
 
   return (
     <div className="space-y-12">
       <Hero />
+
+      {recentProducts.length ? (
+        <section>
+          <div className="flex items-center justify-between">
+            <h2 className="section-title">Recently viewed</h2>
+            <button onClick={recentlyViewed.clear} className="btn btn-ghost text-xs">
+              Clear
+            </button>
+          </div>
+          <div className="mt-6">
+            <ProductGrid products={recentProducts} />
+          </div>
+        </section>
+      ) : null}
 
       <section>
         <div className="flex items-center justify-between">

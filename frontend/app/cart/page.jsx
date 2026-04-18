@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+import Image from 'next/image';
 import { useCart } from '@/hooks/useCart';
 import { useProductsByIds } from '@/hooks/useProductsByIds';
 import { useCurrency } from '@/components/CurrencyProvider';
@@ -15,7 +17,8 @@ export default function CartPage() {
   const subtotal = cart.items.reduce((sum, item) => {
     const product = byId.get(item.productId);
     if (!product) return sum;
-    return sum + product.price * item.quantity;
+    const discounted = product.price * (1 - product.discountPercent / 100);
+    return sum + discounted * item.quantity;
   }, 0);
 
   return (
@@ -44,15 +47,19 @@ export default function CartPage() {
 
             return (
               <div key={product._id} className="card flex items-center gap-4 p-4">
-                <img
-                  src={product.images?.[0]}
-                  alt={product.title}
-                  className="h-20 w-20 rounded-xl object-cover"
-                />
+                <div className="relative h-20 w-20 overflow-hidden rounded-xl bg-mist-100 dark:bg-ink-800">
+                  <Image
+                    src={product.images?.[0]}
+                    alt={product.title}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
+                </div>
                 <div className="flex-1">
                   <p className="font-semibold">{product.title}</p>
                   <p className="text-xs text-ink-500 dark:text-mist-300">
-                    {formatCurrency(product.price, currency)}
+                    {formatCurrency(product.price * (1 - product.discountPercent / 100), currency)}
                   </p>
                   <div className="mt-2 flex items-center gap-2">
                     <button
@@ -91,12 +98,15 @@ export default function CartPage() {
             <span>Shipping</span>
             <span>Free</span>
           </div>
-          <button className="btn btn-primary mt-6 w-full" disabled={cart.items.length === 0}>
+          <Link
+            href="/checkout"
+            className={`btn btn-primary mt-6 w-full ${cart.items.length === 0 ? 'pointer-events-none opacity-50' : ''}`}
+            aria-disabled={cart.items.length === 0}
+          >
             Proceed to checkout
-          </button>
+          </Link>
         </div>
       </div>
     </div>
   );
 }
-

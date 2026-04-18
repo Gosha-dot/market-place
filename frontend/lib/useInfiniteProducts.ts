@@ -42,6 +42,7 @@ export function useInfiniteProducts({
         const data = await fetchProductsPaged({
           page,
           limit: pageSize,
+          q: filters.q,
           category: filters.category,
           minPrice: filters.minPrice,
           maxPrice: filters.maxPrice,
@@ -63,8 +64,17 @@ export function useInfiniteProducts({
         if (!isMounted) return;
         usingMockRef.current = true;
 
+        const q = filters.q?.trim().toLowerCase();
+        const qWords = q ? q.split(/\s+/).filter(Boolean) : [];
+
         const filtered = (mockProducts as unknown as Product[])
           .filter((p) => {
+            if (qWords.length) {
+              const haystack = `${p.title} ${p.brand} ${p.category} ${p.description ?? ''}`.toLowerCase();
+              for (const word of qWords) {
+                if (!haystack.includes(word)) return false;
+              }
+            }
             if (filters.category && p.category !== filters.category) return false;
             if (filters.minPrice !== undefined && p.price < filters.minPrice) return false;
             if (filters.maxPrice !== undefined && p.price > filters.maxPrice) return false;

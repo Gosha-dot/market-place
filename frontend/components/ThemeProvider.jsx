@@ -1,6 +1,6 @@
-﻿'use client';
+'use client';
 
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { applyTheme, getInitialTheme, persistTheme } from '@/lib/theme';
 
 const ThemeContext = createContext({
@@ -12,20 +12,21 @@ export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('light');
 
   useEffect(() => {
-    // First load: system preference wins unless user already saved a choice
     const initial = getInitialTheme();
     setTheme(initial);
     applyTheme(initial);
   }, []);
 
-  const toggle = () => {
-    const next = theme === 'dark' ? 'light' : 'dark';
-    setTheme(next);
-    applyTheme(next);
-    persistTheme(next);
-  };
+  const toggle = useCallback(() => {
+    setTheme((prev) => {
+      const next = prev === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      persistTheme(next);
+      return next;
+    });
+  }, []);
 
-  const value = useMemo(() => ({ theme, toggle }), [theme]);
+  const value = useMemo(() => ({ theme, toggle }), [theme, toggle]);
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
@@ -33,3 +34,4 @@ export function ThemeProvider({ children }) {
 export function useTheme() {
   return useContext(ThemeContext);
 }
+

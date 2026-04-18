@@ -6,10 +6,21 @@ import { CurrencyProvider } from '@/components/CurrencyProvider';
 import { CompareProvider } from '@/hooks/useCompare';
 import { WishlistProvider } from '@/hooks/useWishlist';
 import { CartProvider } from '@/hooks/useCart';
+import { RecentlyViewedProvider } from '@/hooks/useRecentlyViewed';
+import { AuthProvider } from '@/hooks/useAuth';
 
 export const metadata = {
-  title: 'NovaMart | Modern Marketplace',
-  description: 'Temu-style marketplace MVP with dark mode support.'
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  title: {
+    default: 'NovaMart',
+    template: '%s | NovaMart'
+  },
+  description: 'Temu-style marketplace MVP with dark mode support.',
+  openGraph: {
+    title: 'NovaMart',
+    description: 'Modern marketplace MVP.',
+    type: 'website'
+  }
 };
 
 export default function RootLayout({ children }) {
@@ -21,9 +32,13 @@ export default function RootLayout({ children }) {
             <CompareProvider>
               <WishlistProvider>
                 <CartProvider>
-                  <Navbar />
-                  <main className="container-page py-8">{children}</main>
-                  <Footer />
+                  <RecentlyViewedProvider>
+                    <AuthProvider>
+                      <Navbar />
+                      <main className="container-page py-8">{children}</main>
+                      <Footer />
+                    </AuthProvider>
+                  </RecentlyViewedProvider>
                 </CartProvider>
               </WishlistProvider>
             </CompareProvider>

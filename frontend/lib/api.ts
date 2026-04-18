@@ -49,3 +49,9 @@ export async function fetchBrands(): Promise<string[]> {
   return res.json() as Promise<string[]>;
 }
 
+export async function fetchProductSuggestions(q: string): Promise<string[]> {
+  const res = await fetch(`${API_ROOT}/products/suggest?q=${encodeURIComponent(q)}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch suggestions');
+  const data = (await res.json()) as { suggestions?: string[] };
+  return data.suggestions ?? [];
+}

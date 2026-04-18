@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import Rating from '@/components/ui/Rating';
 import { useCurrency } from '@/components/CurrencyProvider';
 import { formatCurrency } from '@/lib/currency';
@@ -23,7 +24,13 @@ export default function ProductCard({ product }: { product: Product }) {
   return (
     <div className="card flex h-full flex-col overflow-hidden">
       <div className="relative h-48 w-full overflow-hidden">
-        <img src={product.images?.[0]} alt={product.title} className="h-full w-full object-cover" />
+        <Image
+          src={product.images?.[0]}
+          alt={product.title}
+          fill
+          sizes="(max-width: 1024px) 100vw, 33vw"
+          className="object-cover"
+        />
         {product.discountPercent > 0 ? (
           <span className="absolute left-3 top-3 rounded-full bg-accent-500 px-2.5 py-1 text-xs font-semibold text-white">
             -{product.discountPercent}%
@@ -75,4 +82,3 @@ export default function ProductCard({ product }: { product: Product }) {
     </div>
   );
 }
-

@@ -26,6 +26,7 @@ export interface Product {
 export type ProductSort = 'price_asc' | 'price_desc' | 'rating_desc' | 'newest';
 
 export interface ProductFilters {
+  q?: string;
   category?: string;
   minPrice?: number;
   maxPrice?: number;
