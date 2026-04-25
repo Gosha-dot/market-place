@@ -36,7 +36,7 @@ export default function Navbar() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search…"
-              className="w-72 rounded-xl border border-mist-200 bg-white px-4 py-2 text-sm dark:border-ink-700 dark:bg-ink-800"
+              className="input w-72 px-4"
             />
           </form>
 
@@ -53,9 +53,23 @@ export default function Navbar() {
             <Link href="/#categories" className="link">
               Categories
             </Link>
-            <Link href="/admin" className="link">
-              Admin
-            </Link>
+            {user ? (
+              <>
+                <Link href="/orders" className="link">
+                  Orders
+                </Link>
+                {user.role === 'seller' ? (
+                  <Link href="/seller" className="link">
+                    Seller
+                  </Link>
+                ) : null}
+                {user.role === 'admin' ? (
+                  <Link href="/admin" className="link">
+                    Admin
+                  </Link>
+                ) : null}
+              </>
+            ) : null}
           </div>
         </div>
 

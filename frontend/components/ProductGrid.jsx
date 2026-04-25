@@ -1,13 +1,7 @@
 'use client';
 
-import ProductCard from '@/components/ProductCard';
+import ProductList from '@/components/ProductList';
 
-export default function ProductGrid({ products }) {
-  return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {products.map((product) => (
-        <ProductCard key={product._id} product={product} />
-      ))}
-    </div>
-  );
+export default function ProductGrid({ products, layout = 'grid' }) {
+  return <ProductList products={products} layout={layout} />;
 }

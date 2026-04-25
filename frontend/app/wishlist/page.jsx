@@ -1,6 +1,6 @@
 'use client';
 
-import ProductGrid from '@/components/ProductGrid';
+import ProductList from '@/components/ProductList';
 import { useWishlist } from '@/hooks/useWishlist';
 import { useProductsByIds } from '@/hooks/useProductsByIds';
 
@@ -32,7 +32,7 @@ export default function WishlistPage() {
       {loading ? (
         <div className="card p-6 text-sm text-ink-600 dark:text-mist-200">Loading...</div>
       ) : (
-        <ProductGrid products={items} />
+        <ProductList products={items} />
       )}
     </div>
   );

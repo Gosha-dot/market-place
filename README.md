@@ -1,74 +1,80 @@
-﻿# NovaMart Marketplace MVP (Frontend Only)
+# NovaMart Marketplace MVP (Full Stack)
 
-A Temu-style marketplace MVP frontend built with Next.js + Tailwind CSS, featuring a modern light/dark UI.
+Temu-style marketplace MVP with:
+- Frontend: Next.js + Tailwind (mobile-first, light/dark mode with persistence)
+- Backend: Express + MongoDB
+- Auth: JWT
+- Payments: Stripe mocked (MVP)
+- Features: coupons, recommendations, order history, seller ratings
 
 ## Run From Project Root
 
-```
-copy frontend\.env.example frontend\.env.local
+```bash
+npm run install:backend
 npm run install:frontend
+
+copy backend\.env.example backend\.env
+copy frontend\.env.example frontend\.env.local
+
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+- Frontend: `http://localhost:3000`
+- API: `http://localhost:4000` (health check: `/health`)
+
+If PowerShell blocks `npm` scripts, use `npm.cmd` instead (e.g. `npm.cmd run dev`).
+
+## Seed Demo Data (Optional)
+
+```bash
+cd backend
+npm run seed
+```
+
+Creates demo accounts and products:
+- `admin@novamart.dev` / `password123`
+- `seller@novamart.dev` / `password123`
 
 ## Project Structure
 
-```
+```text
 market-place/
+  backend/
+    src/
+      server.js
+      app.js
+      config/db.js
+      middleware/auth.js
+      models/ (User, Seller, Product, Order, Coupon, Review, SellerRating, Cart)
+      controllers/
+      routes/
+      services/ (couponService, recommendationService, stripeService)
   frontend/
     app/
       page.jsx
-      layout.jsx
-      products/[id]/page.jsx
-      auth/login/page.jsx
-      auth/register/page.jsx
-      cart/page.jsx
-      wishlist/page.jsx
-      checkout/page.jsx
-      admin/page.jsx
+      products/[id]/page.tsx
+      checkout/page.tsx
+      orders/page.tsx
+      orders/[id]/page.tsx
+      seller/page.tsx
+      admin/page.tsx
     components/
-      Navbar.jsx
-      ThemeProvider.jsx
-      ThemeToggle.jsx
-      CurrencyProvider.jsx
-      CurrencyToggle.jsx
-      Hero.jsx
-      FlashSale.jsx
-      Categories.jsx
-      ProductCard.jsx
-      ProductGrid.jsx
-      Filters.jsx
-      Pagination.jsx
-      ui/Rating.jsx
-      ui/Countdown.jsx
-      ui/LoadMoreTrigger.jsx
+    hooks/
     lib/
-      api.js
-      cart.js
-      mockData.js
-      theme.js
-      currency.js
-      useInfiniteProducts.js
-    styles/
-      globals.css
-    tailwind.config.js
-    postcss.config.js
-    next.config.js
-    package.json
+      api.ts
+      mockData.ts
+      useInfiniteProducts.ts
+  package.json
   README.md
 ```
 
 ## Notes
 
 - Dark mode uses Tailwind class strategy with localStorage persistence and system detection on first load.
-- Currency switcher (USD/EUR/UAH) is in the navbar and applies across product cards, cart, and checkout.
-- Infinite scroll is enabled on the homepage.
-- API calls are prepared in `frontend/lib/api.js`, but the UI will gracefully fall back to mock data.
-- Pages include: Home, Product detail, Auth, Cart, Wishlist, Checkout, Admin shell.
+- The frontend will gracefully fall back to mock product data if the backend is unavailable.
 
 ## Next Steps
 
-- Add real backend or connect to your existing API.
-- Add form validation + auth flows.
-- Add product seeding and richer filters.
+- Expand admin panel (users/products management UI).
+- Replace mocked payments with real Stripe when ready.
+- Add DB transactions/locking to harden checkout at scale.

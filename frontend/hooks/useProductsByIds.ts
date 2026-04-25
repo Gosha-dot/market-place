@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { fetchProducts } from '@/lib/api';
+import { mockProducts } from '@/lib/mockData';
 import type { Product, ProductId } from '@/types/product';
 
 export function useProductsByIds(ids: ProductId[]) {
@@ -22,6 +23,10 @@ export function useProductsByIds(ids: ProductId[]) {
         const res = await fetchProducts({ ids: idsKey });
         if (!mounted) return;
         setItems(res.items);
+      } catch {
+        if (!mounted) return;
+        const fromMock = (mockProducts as unknown as Product[]).filter((p) => ids.includes(p._id));
+        setItems(fromMock);
       } finally {
         if (mounted) setLoading(false);
       }

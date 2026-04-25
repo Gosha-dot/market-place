@@ -65,6 +65,7 @@ export function parseProductsQuery(searchParams: URLSearchParams): ParsedProduct
     sortRaw === 'price_asc' ||
     sortRaw === 'price_desc' ||
     sortRaw === 'rating_desc' ||
+    sortRaw === 'name_asc' ||
     sortRaw === 'newest'
       ? sortRaw
       : 'newest';
@@ -126,7 +127,9 @@ export function buildMongoQuery(parsed: ParsedProductsQuery): {
         ? { price: -1 }
         : parsed.sort === 'rating_desc'
           ? { rating: -1 }
-          : { createdAt: -1 };
+          : parsed.sort === 'name_asc'
+            ? { title: 1 }
+            : { createdAt: -1 };
 
   return { mongoQuery, mongoSort };
 }
@@ -135,6 +138,7 @@ function compareBySort(a: Product, b: Product, sort: ProductSort): number {
   if (sort === 'price_asc') return a.price - b.price;
   if (sort === 'price_desc') return b.price - a.price;
   if (sort === 'rating_desc') return b.rating - a.rating;
+  if (sort === 'name_asc') return a.title.localeCompare(b.title);
   // newest
   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
 }

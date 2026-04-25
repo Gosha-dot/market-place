@@ -46,7 +46,7 @@ export function useInfiniteProducts({
           category: filters.category,
           minPrice: filters.minPrice,
           maxPrice: filters.maxPrice,
-          rating: filters.minRating,
+          minRating: filters.minRating,
           brand: filters.brand,
           hasDiscount: filters.hasDiscount,
           discountPercent: filters.discountPercent,
@@ -90,6 +90,7 @@ export function useInfiniteProducts({
             if (sort === 'price_asc') return a.price - b.price;
             if (sort === 'price_desc') return b.price - a.price;
             if (sort === 'rating_desc') return b.rating - a.rating;
+            if (sort === 'name_asc') return a.title.localeCompare(b.title);
             return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
           });
 

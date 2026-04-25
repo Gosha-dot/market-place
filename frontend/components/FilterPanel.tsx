@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ProductFilters, ProductSort } from '@/types/product';
 import { debounce } from '@/utils/debounce';
 
@@ -8,6 +8,7 @@ type Props = {
   filters: ProductFilters;
   sort: ProductSort;
   brands: string[];
+  categories?: string[];
   onChangeFilters: (next: ProductFilters) => void;
   onChangeSort: (sort: ProductSort) => void;
   onReset: () => void;
@@ -18,6 +19,7 @@ export default function FilterPanel({
   filters,
   sort,
   brands,
+  categories = [],
   onChangeFilters,
   onChangeSort,
   onReset,
@@ -33,21 +35,34 @@ export default function FilterPanel({
   useEffect(() => setMaxPriceInput(filters.maxPrice?.toString() ?? ''), [filters.maxPrice]);
   useEffect(() => setDiscountInput(filters.discountPercent?.toString() ?? ''), [filters.discountPercent]);
 
+  const filtersRef = useRef(filters);
+  const onChangeFiltersRef = useRef(onChangeFilters);
+
+  useEffect(() => {
+    filtersRef.current = filters;
+  }, [filters]);
+
+  useEffect(() => {
+    onChangeFiltersRef.current = onChangeFilters;
+  }, [onChangeFilters]);
+
   const commitQuery = useMemo(
     () =>
       debounce((q: string) => {
         const nextQ = q.trim();
-        onChangeFilters({ ...filters, q: nextQ.length ? nextQ : undefined });
+        const current = filtersRef.current;
+        onChangeFiltersRef.current({ ...current, q: nextQ.length ? nextQ : undefined });
       }, 200),
-    [filters, onChangeFilters]
+    []
   );
 
   const commitNumber = useMemo(
     () =>
       debounce((next: { minPrice?: number; maxPrice?: number; discountPercent?: number }) => {
-        onChangeFilters({ ...filters, ...next });
+        const current = filtersRef.current;
+        onChangeFiltersRef.current({ ...current, ...next });
       }, 250),
-    [filters, onChangeFilters]
+    []
   );
 
   const selectedBrands = filters.brand ?? [];
@@ -60,7 +75,7 @@ export default function FilterPanel({
   };
 
   return (
-    <div className="card grid gap-4 p-4 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr]">
+    <div className="card grid gap-4 p-4 lg:grid-cols-[1.35fr_1fr_1fr_1.2fr]">
       <div className="lg:col-span-4">
         <label className="text-xs text-ink-500 dark:text-mist-300">Search</label>
         <div className="mt-1 flex gap-2">
@@ -73,7 +88,7 @@ export default function FilterPanel({
               commitQuery(v);
             }}
             placeholder="Search products, brands, categories..."
-            className="w-full rounded-lg border border-mist-200 bg-white px-3 py-2 text-sm dark:border-ink-700 dark:bg-ink-800"
+            className="input"
           />
           <button
             type="button"
@@ -90,6 +105,25 @@ export default function FilterPanel({
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
         <div className="flex flex-col">
+          <label className="text-xs text-ink-500 dark:text-mist-300">Category</label>
+          <select
+            value={filters.category ?? ''}
+            disabled={disabled}
+            onChange={(e) => {
+              const v = e.target.value;
+              onChangeFilters({ ...filters, category: v === '' ? undefined : v });
+            }}
+            className="select mt-1"
+          >
+            <option value="">Any</option>
+            {categories.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col">
           <label className="text-xs text-ink-500 dark:text-mist-300">Min price</label>
           <input
             inputMode="numeric"
@@ -102,7 +136,7 @@ export default function FilterPanel({
               const n = v === '' ? undefined : Number(v);
               commitNumber({ minPrice: Number.isFinite(n) ? n : undefined });
             }}
-            className="mt-1 rounded-lg border border-mist-200 bg-white px-3 py-2 text-sm dark:border-ink-700 dark:bg-ink-800"
+            className="input mt-1"
           />
         </div>
         <div className="flex flex-col">
@@ -118,7 +152,7 @@ export default function FilterPanel({
               const n = v === '' ? undefined : Number(v);
               commitNumber({ maxPrice: Number.isFinite(n) ? n : undefined });
             }}
-            className="mt-1 rounded-lg border border-mist-200 bg-white px-3 py-2 text-sm dark:border-ink-700 dark:bg-ink-800"
+            className="input mt-1"
           />
         </div>
         <div className="flex flex-col">
@@ -130,7 +164,7 @@ export default function FilterPanel({
               const v = e.target.value;
               onChangeFilters({ ...filters, minRating: v === '' ? undefined : Number(v) });
             }}
-            className="mt-1 rounded-lg border border-mist-200 bg-white px-3 py-2 text-sm dark:border-ink-700 dark:bg-ink-800"
+            className="select mt-1"
           >
             <option value="">Any</option>
             <option value="4">4+</option>
@@ -170,7 +204,7 @@ export default function FilterPanel({
                   const n = v === '' ? undefined : Number(v);
                   commitNumber({ discountPercent: Number.isFinite(n) ? n : undefined });
                 }}
-                className="w-24 rounded-lg border border-mist-200 bg-white px-3 py-2 text-sm dark:border-ink-700 dark:bg-ink-800"
+                className="input w-24"
               />
             </div>
           </div>
@@ -197,9 +231,10 @@ export default function FilterPanel({
             value={sort}
             disabled={disabled}
             onChange={(e) => onChangeSort(e.target.value as ProductSort)}
-            className="mt-1 rounded-lg border border-mist-200 bg-white px-3 py-2 text-sm dark:border-ink-700 dark:bg-ink-800"
+            className="select mt-1"
           >
             <option value="newest">Newest</option>
+            <option value="name_asc">Name: A → Z</option>
             <option value="price_asc">Price: low → high</option>
             <option value="price_desc">Price: high → low</option>
             <option value="rating_desc">Rating</option>

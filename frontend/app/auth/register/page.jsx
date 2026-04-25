@@ -11,6 +11,7 @@ export default function RegisterPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [asSeller, setAsSeller] = useState(false);
   const [error, setError] = useState('');
 
   return (
@@ -23,9 +24,9 @@ export default function RegisterPage() {
       </div>
       <form
         className="card space-y-4 p-6"
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          const res = auth.register({ name, email, password });
+          const res = await auth.register({ name, email, password, role: asSeller ? 'seller' : undefined });
           if (!res.ok) {
             setError(res.error);
             return;
@@ -38,7 +39,7 @@ export default function RegisterPage() {
         <div className="space-y-2">
           <label className="text-xs font-semibold text-ink-600 dark:text-mist-200">Full name</label>
           <input
-            className="w-full rounded-xl border border-mist-200 bg-white px-4 py-3 dark:border-ink-700 dark:bg-ink-800"
+            className="input px-4 py-3"
             placeholder="Alex Morgan"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -48,7 +49,7 @@ export default function RegisterPage() {
         <div className="space-y-2">
           <label className="text-xs font-semibold text-ink-600 dark:text-mist-200">Email</label>
           <input
-            className="w-full rounded-xl border border-mist-200 bg-white px-4 py-3 dark:border-ink-700 dark:bg-ink-800"
+            className="input px-4 py-3"
             placeholder="you@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -58,7 +59,7 @@ export default function RegisterPage() {
         <div className="space-y-2">
           <label className="text-xs font-semibold text-ink-600 dark:text-mist-200">Password</label>
           <input
-            className="w-full rounded-xl border border-mist-200 bg-white px-4 py-3 dark:border-ink-700 dark:bg-ink-800"
+            className="input px-4 py-3"
             placeholder="Create a password"
             type="password"
             value={password}
@@ -66,8 +67,12 @@ export default function RegisterPage() {
             autoComplete="new-password"
           />
         </div>
+        <label className="flex items-center gap-2 text-xs text-ink-600 dark:text-mist-200">
+          <input type="checkbox" checked={asSeller} onChange={(e) => setAsSeller(e.target.checked)} />
+          Register as seller (dev)
+        </label>
         <button className="btn btn-primary w-full" type="submit">
-          Create account
+          {auth.loading ? 'Creating...' : 'Create account'}
         </button>
         <p className="text-xs text-ink-500 dark:text-mist-300">
           By continuing, you agree to our Terms and Privacy Policy.

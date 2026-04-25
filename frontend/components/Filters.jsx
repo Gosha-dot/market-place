@@ -6,7 +6,7 @@
         <select
           value={filters.category}
           onChange={(e) => onChange({ ...filters, category: e.target.value })}
-          className="mt-1 rounded-lg border border-mist-200 bg-white px-3 py-2 text-sm dark:border-ink-700 dark:bg-ink-800"
+          className="select mt-1"
         >
           <option value="">All</option>
           {categories.map((cat) => (
@@ -22,7 +22,7 @@
           type="number"
           value={filters.maxPrice}
           onChange={(e) => onChange({ ...filters, maxPrice: e.target.value })}
-          className="mt-1 rounded-lg border border-mist-200 bg-white px-3 py-2 text-sm dark:border-ink-700 dark:bg-ink-800"
+          className="input mt-1"
         />
       </div>
       <div className="flex flex-col">
@@ -30,7 +30,7 @@
         <select
           value={filters.minRating}
           onChange={(e) => onChange({ ...filters, minRating: e.target.value })}
-          className="mt-1 rounded-lg border border-mist-200 bg-white px-3 py-2 text-sm dark:border-ink-700 dark:bg-ink-800"
+          className="select mt-1"
         >
           <option value="">Any</option>
           <option value="4">4+</option>

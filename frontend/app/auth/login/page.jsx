@@ -22,9 +22,9 @@ export default function LoginPage() {
       </div>
       <form
         className="card space-y-4 p-6"
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          const res = auth.login({ email, password });
+          const res = await auth.login({ email, password });
           if (!res.ok) {
             setError(res.error);
             return;
@@ -37,7 +37,7 @@ export default function LoginPage() {
         <div className="space-y-2">
           <label className="text-xs font-semibold text-ink-600 dark:text-mist-200">Email</label>
           <input
-            className="w-full rounded-xl border border-mist-200 bg-white px-4 py-3 dark:border-ink-700 dark:bg-ink-800"
+            className="input px-4 py-3"
             placeholder="you@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -47,7 +47,7 @@ export default function LoginPage() {
         <div className="space-y-2">
           <label className="text-xs font-semibold text-ink-600 dark:text-mist-200">Password</label>
           <input
-            className="w-full rounded-xl border border-mist-200 bg-white px-4 py-3 dark:border-ink-700 dark:bg-ink-800"
+            className="input px-4 py-3"
             placeholder="••••••••"
             type="password"
             value={password}
@@ -56,7 +56,7 @@ export default function LoginPage() {
           />
         </div>
         <button className="btn btn-primary w-full" type="submit">
-          Login
+          {auth.loading ? 'Signing in...' : 'Login'}
         </button>
         <div className="flex items-center justify-between text-xs text-ink-500 dark:text-mist-300">
           <span>Forgot password?</span>

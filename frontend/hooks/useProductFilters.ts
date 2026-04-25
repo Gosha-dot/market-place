@@ -37,7 +37,7 @@ function parseBrand(raw: string | null): string[] | undefined {
 }
 
 function parseSort(raw: string | null): ProductSort {
-  if (raw === 'price_asc' || raw === 'price_desc' || raw === 'rating_desc' || raw === 'newest') {
+  if (raw === 'price_asc' || raw === 'price_desc' || raw === 'rating_desc' || raw === 'name_asc' || raw === 'newest') {
     return raw;
   }
   return 'newest';
@@ -50,7 +50,7 @@ function serialize(filters: ProductFilters, sort: ProductSort) {
   if (filters.category) sp.set('category', filters.category);
   if (filters.minPrice !== undefined) sp.set('minPrice', String(filters.minPrice));
   if (filters.maxPrice !== undefined) sp.set('maxPrice', String(filters.maxPrice));
-  if (filters.minRating !== undefined) sp.set('rating', String(filters.minRating));
+  if (filters.minRating !== undefined) sp.set('minRating', String(filters.minRating));
   if (filters.brand?.length) sp.set('brand', filters.brand.join(','));
   if (filters.hasDiscount !== undefined) sp.set('hasDiscount', String(filters.hasDiscount));
   if (filters.discountPercent !== undefined) sp.set('discountPercent', String(filters.discountPercent));
