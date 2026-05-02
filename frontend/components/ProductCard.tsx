@@ -25,7 +25,7 @@ export default function ProductCard({ product, layout = 'grid' }: { product: Pro
   const isNew =
     typeof product.createdAt === 'string' && Date.now() - new Date(product.createdAt).getTime() < 1000 * 60 * 60 * 24 * 14;
 
-  const imageSrc = product.images?.[0] ?? 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80';
+  const imageSrc = product.images?.[0] ?? '/placeholder.svg';
 
   return (
     <div

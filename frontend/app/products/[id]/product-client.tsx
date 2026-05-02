@@ -32,7 +32,7 @@ export default function ProductClient({ product }: { product: Product }) {
 
   const images = product.images?.length
     ? product.images
-    : ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80'];
+    : ['/placeholder.svg'];
 
   const [activeIndex, setActiveIndex] = useState(0);
   const activeImage = images[Math.min(activeIndex, images.length - 1)];

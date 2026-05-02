@@ -24,72 +24,122 @@ body {
   @apply bg-ink-900 text-mist-100;
 }
 
-.container-page {
-  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
-}
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
 
-.card {
-  @apply rounded-2xl border border-mist-200 bg-white shadow-soft;
-}
+  .card {
+    @apply rounded-2xl border border-mist-200 bg-white shadow-soft;
+  }
 
-.dark .card {
-  @apply border-ink-700 bg-ink-800 shadow-none;
-}
+  .dark .card {
+    @apply border-ink-700 bg-ink-800 shadow-none;
+  }
 
-.section-title {
-  @apply font-display text-2xl sm:text-3xl;
-}
+  .section-title {
+    @apply font-display text-2xl sm:text-3xl;
+  }
 
-.badge {
-  @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide;
-}
+  .badge {
+    @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide;
+  }
 
-.badge-accent {
-  @apply bg-accent-500 text-white;
-}
+  .badge-accent {
+    @apply bg-accent-500 text-white;
+  }
 
-.badge-muted {
-  @apply bg-mist-100 text-ink-700;
-}
+  .badge-muted {
+    @apply bg-mist-100 text-ink-700;
+  }
 
-.dark .badge-muted {
-  @apply bg-ink-700 text-mist-100;
-}
+  .dark .badge-muted {
+    @apply bg-ink-700 text-mist-100;
+  }
 
-.btn {
-  @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold shadow-soft outline-none focus-visible:ring-2 focus-visible:ring-accent-500/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white;
-}
+  .btn {
+    @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold shadow-soft outline-none;
+  }
 
-.btn-primary {
-  @apply bg-accent-500 text-white hover:bg-accent-600;
-}
+  .btn:focus-visible {
+    @apply ring-2 ring-accent-500/25 ring-offset-2 ring-offset-white;
+  }
 
-.btn-ghost {
-  @apply bg-white text-ink-900 border border-mist-200 hover:border-mist-300 hover:bg-mist-50;
-}
+  .dark .btn:focus-visible {
+    @apply ring-offset-ink-900;
+  }
 
-.dark .btn-ghost {
-  @apply bg-ink-800 text-mist-100 border-ink-700 hover:border-ink-600 hover:bg-ink-700;
-}
+  .btn-primary {
+    @apply bg-accent-500 text-white;
+  }
 
-.dark .btn {
-  @apply focus-visible:ring-offset-ink-900;
-}
+  .btn-primary:hover {
+    @apply bg-accent-600;
+  }
 
-.link {
-  @apply text-ink-700 hover:text-ink-900;
-}
+  .btn-ghost {
+    @apply border border-mist-200 bg-white text-ink-900;
+  }
 
-.dark .link {
-  @apply text-mist-200 hover:text-white;
-}
+  .btn-ghost:hover {
+    @apply border-mist-300 bg-mist-50;
+  }
 
-.input {
-  @apply w-full rounded-xl border border-mist-200 bg-white px-3 py-2 text-sm text-ink-900 outline-none shadow-sm placeholder:text-ink-400 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/15 dark:border-ink-700 dark:bg-ink-800 dark:text-mist-100 dark:placeholder:text-mist-300;
-}
+  .dark .btn-ghost {
+    @apply border-ink-700 bg-ink-800 text-mist-100;
+  }
 
-.select {
-  @apply w-full rounded-xl border border-mist-200 bg-white px-3 py-2 text-sm text-ink-900 outline-none shadow-sm focus:border-accent-500 focus:ring-2 focus:ring-accent-500/15 dark:border-ink-700 dark:bg-ink-800 dark:text-mist-100;
+  .dark .btn-ghost:hover {
+    @apply border-ink-600 bg-ink-700;
+  }
+
+  .link {
+    @apply text-ink-700;
+  }
+
+  .link:hover {
+    @apply text-ink-900;
+  }
+
+  .dark .link {
+    @apply text-mist-200;
+  }
+
+  .dark .link:hover {
+    @apply text-white;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-mist-200 bg-white px-3 py-2 text-sm text-ink-900 outline-none shadow-sm;
+  }
+
+  .input::placeholder {
+    @apply text-ink-400;
+  }
+
+  .input:focus {
+    @apply border-accent-500 ring-2 ring-accent-500/15;
+  }
+
+  .dark .input {
+    @apply border-ink-700 bg-ink-800 text-mist-100;
+  }
+
+  .dark .input::placeholder {
+    @apply text-mist-300;
+  }
+
+  .select {
+    @apply w-full rounded-xl border border-mist-200 bg-white px-3 py-2 text-sm text-ink-900 outline-none shadow-sm;
+  }
+
+  .select:focus {
+    @apply border-accent-500 ring-2 ring-accent-500/15;
+  }
+
+  .dark .select {
+    @apply border-ink-700 bg-ink-800 text-mist-100;
+  }
 }
 
 .line-clamp-2 {

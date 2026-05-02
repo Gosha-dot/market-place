@@ -1,6 +1,8 @@
 import type { Product } from '@/types/product';
 
-export const mockProducts: Product[] = [
+const PLACEHOLDER_IMAGE = '/placeholder.svg';
+
+const rawProducts: Product[] = [
   {
     _id: 'p1',
     title: 'Aurora Noise-Canceling Headphones',
@@ -9,7 +11,7 @@ export const mockProducts: Product[] = [
     discountPercent: 45,
     rating: 4.7,
     brand: 'Sony',
-    images: ['https://images.unsplash.com/photo-1518441988793-7d9f4e5f7c7b?auto=format&fit=crop&w=800&q=80'],
+    images: ['https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80'],
     category: 'Electronics',
     stockLeft: 12,
     createdAt: '2026-04-02T10:15:00.000Z',
@@ -174,7 +176,7 @@ export const mockProducts: Product[] = [
     discountPercent: 33,
     rating: 4.7,
     brand: 'Adidas',
-    images: ['https://images.unsplash.com/photo-1528701800489-20b4c65011e8?auto=format&fit=crop&w=800&q=80'],
+    images: ['https://images.unsplash.com/photo-1517686469429-8bdb7a92b48e?auto=format&fit=crop&w=800&q=80'],
     category: 'Clothes',
     stockLeft: 11,
     createdAt: '2026-03-25T10:55:00.000Z',
@@ -574,6 +576,8 @@ export const mockProducts: Product[] = [
     seller: { name: 'QuietCo', rating: 4.4 }
   }
 ];
+
+export const mockProducts: Product[] = rawProducts.map((p) => ({ ...p, images: [PLACEHOLDER_IMAGE] }));
 
 export const categories = Array.from(new Set(mockProducts.map((p) => p.category))).sort();
 export const brands = Array.from(new Set(mockProducts.map((p) => p.brand))).sort();
