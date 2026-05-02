@@ -8,7 +8,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="flex items-center gap-2 rounded-full border border-mist-200 bg-white px-3 py-1.5 text-xs font-semibold text-ink-700 hover:border-mist-300 dark:border-ink-700 dark:bg-ink-800 dark:text-mist-100"
+      className="flex items-center gap-2 rounded-none border border-mist-200 bg-white px-3 py-1.5 text-xs font-semibold text-ink-700 hover:border-mist-300 dark:border-ink-700 dark:bg-ink-800 dark:text-mist-100"
       aria-label="Toggle dark mode"
     >
       {theme === 'dark' ? (

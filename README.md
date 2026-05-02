@@ -3,7 +3,7 @@
 Temu-style marketplace MVP with:
 - Frontend: Next.js + Tailwind (mobile-first, light/dark mode with persistence)
 - Payments: Stripe mocked (MVP)
-- Features: coupons, recommendations, order history, seller ratings
+- Features: coupons, recommendations, order history, order tracking timeline, seller ratings
 
 ## Run From Project Root
 

@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { apiMyOrder, apiRateSeller } from '@/lib/api';
 import type { Order, OrderItem } from '@/types/order';
+import OrderStatusTimeline from '@/components/OrderStatusTimeline';
 
 function discountedUnitPrice(item: OrderItem) {
   return item.unitPrice * (1 - (item.discountPercent || 0) / 100);
@@ -83,6 +84,8 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
           ← Back
         </Link>
       </div>
+
+      <OrderStatusTimeline status={order.status} />
 
       <div className="card space-y-2 p-5 text-sm text-ink-600 dark:text-mist-200">
         <div className="flex items-center justify-between">

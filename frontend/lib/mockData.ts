@@ -577,7 +577,14 @@ const rawProducts: Product[] = [
   }
 ];
 
-export const mockProducts: Product[] = rawProducts.map((p) => ({ ...p, images: [PLACEHOLDER_IMAGE] }));
+// Убираем 10 товаров из мок-данных (как просили).
+const productsWithoutLastTen = rawProducts.slice(0, Math.max(0, rawProducts.length - 10));
+
+// И оставляем реальные картинки, если они есть в товаре (иначе placeholder).
+export const mockProducts: Product[] = productsWithoutLastTen.map((p) => ({
+  ...p,
+  images: p.images?.length ? p.images : [PLACEHOLDER_IMAGE]
+}));
 
 export const categories = Array.from(new Set(mockProducts.map((p) => p.category))).sort();
 export const brands = Array.from(new Set(mockProducts.map((p) => p.brand))).sort();

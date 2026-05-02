@@ -54,32 +54,6 @@ export default function Navbar() {
       <div className="container-page">
         <div className="flex items-center justify-between gap-3 py-3">
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              className="btn btn-ghost px-3 py-2 text-sm md:hidden"
-              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={mobileOpen}
-              onClick={() => setMobileOpen((v) => !v)}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                {mobileOpen ? (
-                  <path
-                    d="M6 6l12 12M18 6L6 18"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                  />
-                ) : (
-                  <path
-                    d="M4 7h16M4 12h16M4 17h16"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                  />
-                )}
-              </svg>
-            </button>
-
             <Link href="/" className="group flex items-center gap-2">
               <span className="font-display text-xl text-ink-900 dark:text-white">NovaMart</span>
               <span className="rounded-full bg-accent-500/10 px-2 py-0.5 text-[11px] font-semibold text-accent-600 dark:text-accent-500">
@@ -116,13 +90,39 @@ export default function Navbar() {
           </form>
 
           <div className="flex items-center gap-2">
-            <Link href="/compare" className="btn btn-ghost hidden px-3 py-2 text-sm md:inline-flex">
+            <button
+              type="button"
+              className="btn btn-ghost rounded-none px-3 py-2 text-sm md:hidden"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileOpen}
+              onClick={() => setMobileOpen((v) => !v)}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                {mobileOpen ? (
+                  <path
+                    d="M6 6l12 12M18 6L6 18"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                  />
+                ) : (
+                  <path
+                    d="M4 7h16M4 12h16M4 17h16"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                  />
+                )}
+              </svg>
+            </button>
+
+            <Link href="/compare" className="btn btn-ghost hidden rounded-none px-3 py-2 text-sm md:inline-flex">
               Compare
             </Link>
-            <Link href="/wishlist" className="btn btn-ghost hidden px-3 py-2 text-sm md:inline-flex">
+            <Link href="/wishlist" className="btn btn-ghost hidden rounded-none px-3 py-2 text-sm md:inline-flex">
               Wishlist
             </Link>
-            <Link href="/cart" className="btn btn-primary relative px-3 py-2 text-sm">
+            <Link href="/cart" className="btn btn-primary relative rounded-none px-3 py-2 text-sm">
               <span className="hidden sm:inline">Cart</span>
               <span className="sm:hidden" aria-hidden="true">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -145,11 +145,15 @@ export default function Navbar() {
             </Link>
 
             {user ? (
-              <button className="btn btn-ghost hidden px-3 py-2 text-sm md:inline-flex" onClick={logout} title={user.email}>
+              <button
+                className="btn btn-ghost hidden rounded-none px-3 py-2 text-sm md:inline-flex"
+                onClick={logout}
+                title={user.email}
+              >
                 Logout
               </button>
             ) : (
-              <Link href="/auth/login" className="btn btn-ghost hidden px-3 py-2 text-sm md:inline-flex">
+              <Link href="/auth/login" className="btn btn-ghost hidden rounded-none px-3 py-2 text-sm md:inline-flex">
                 Sign in
               </Link>
             )}
@@ -159,7 +163,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="hidden items-center gap-4 pb-3 text-sm text-ink-600 dark:text-mist-200 md:flex">
+        <div className="hidden items-center justify-end gap-4 pb-3 text-sm text-ink-600 dark:text-mist-200 md:flex">
           {primaryLinks.map((l) => (
             <Link key={l.href} href={l.href} className="link">
               {l.label}
@@ -187,22 +191,22 @@ export default function Navbar() {
 
             <div className="grid gap-2">
               {[...primaryLinks, ...accountLinks].map((l) => (
-                <Link key={l.href} href={l.href} className="btn btn-ghost justify-start px-4 py-3 text-sm">
+                <Link key={l.href} href={l.href} className="btn btn-ghost justify-start rounded-none px-4 py-3 text-sm">
                   {l.label}
                 </Link>
               ))}
-              <Link href="/compare" className="btn btn-ghost justify-start px-4 py-3 text-sm">
+              <Link href="/compare" className="btn btn-ghost justify-start rounded-none px-4 py-3 text-sm">
                 Compare
               </Link>
-              <Link href="/wishlist" className="btn btn-ghost justify-start px-4 py-3 text-sm">
+              <Link href="/wishlist" className="btn btn-ghost justify-start rounded-none px-4 py-3 text-sm">
                 Wishlist
               </Link>
               {user ? (
-                <button className="btn btn-ghost justify-start px-4 py-3 text-sm" onClick={logout} title={user.email}>
+                <button className="btn btn-ghost justify-start rounded-none px-4 py-3 text-sm" onClick={logout} title={user.email}>
                   Logout
                 </button>
               ) : (
-                <Link href="/auth/login" className="btn btn-ghost justify-start px-4 py-3 text-sm">
+                <Link href="/auth/login" className="btn btn-ghost justify-start rounded-none px-4 py-3 text-sm">
                   Sign in
                 </Link>
               )}
@@ -213,4 +217,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
